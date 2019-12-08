@@ -8,7 +8,7 @@ module OTP
       end
 
       macro included
-        extend ClassMethods(T)
+        extend OTP::GenServer::ClassMethods(T)
       end
 
       def initialize(@state : T)

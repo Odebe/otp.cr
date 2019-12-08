@@ -8,7 +8,7 @@ module OTP
       end
 
       macro init_handlers!
-        def do_message(m : Union(*T))
+        def do_message(m)
           {% for type in T.resolve %}
             if m.is_a? {{ type }}
               return handle(@state, m)
