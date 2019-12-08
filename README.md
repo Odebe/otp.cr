@@ -19,48 +19,41 @@ Naive OTP implementation in Crystal.
 ```crystal
 require "otpcr/otp"
 
-class MyServ
-  include OTP::GenServer(Int32, String, Int32, Bool)
-  
-  def init(_number)
-    0
-  end
-
-  def handle(state, m : String)
-    puts m + " " + typeof(m).to_s
-    
-    0
-  end
+class MyServer
+  include OTP::GenServer
+  include OTP::GenServer::State(Int32)
+  include OTP::GenServer::Handlers(Int32, Symbol, Bool)
 
   def handle(state, m : Int32)
-    puts m.to_s + " " + typeof(m).to_s
+    puts "It's #{typeof(m)}, and equal #{m}"
 
-    state + m
+    m + 123 # new state
+  end
+
+  def handle(state, m : Symbol)
+    puts "It's #{typeof(m)}, and equal #{m.inspect}"
+
+    1 # new state
   end
 
   def handle(state, m : Bool)
-    puts m.to_s + " " + typeof(m).to_s
-    
-    state
+    puts "It's #{typeof(m)}, and equal #{m.inspect}"
+
+    0 # new state
   end
 end
 
-s = MyServ.new(9999)
-s.start
-
-puts "init state: #{s.state}"
-
-s.cast(12333)
-sleep 1
-puts s.state
+s = MyServer.init(123)
+s.spawn
 
 s.cast(1)
-sleep 1
-puts s.state
+sleep 2
 
-s.cast("123")
-sleep 1
-puts s.state
+s.cast(:a)
+sleep 2
+
+s.cast(true)
+sleep 2
 ```
 
 TODO: Write usage instructions here
