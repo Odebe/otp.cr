@@ -1,0 +1,9 @@
+name: otp.cr
+version: 0.1.0
+
+authors:
+  - Odebe <derpiranha@gmail.com>
+
+crystal: 0.31.1
+
+license: MIT
