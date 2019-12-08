@@ -1,6 +1,6 @@
 # TODO: Write documentation for `OTP`
 
-require './otp/*.cr'
+require "./otp/*.cr"
 
 module OTP
   VERSION = "0.1.0"

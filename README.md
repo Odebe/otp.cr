@@ -17,7 +17,7 @@ Naive OTP implementation in Crystal.
 ## Usage
 
 ```crystal
-require "otpcr"
+equire "otpcr/otp"
 
 class MyServ
   include OTP::GenServer(Int32, String, Int32, Bool)
