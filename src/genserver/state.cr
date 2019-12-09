@@ -11,7 +11,12 @@ module OTP
         extend OTP::GenServer::State::ClassMethods(T)
       end
 
-      def initialize(@state : T)
+      @state : T
+      @init : T
+
+      def initialize(state : T)
+        @init = state
+        @state = init(state)
       end
     end
   end
