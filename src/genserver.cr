@@ -9,8 +9,8 @@ module OTP
 
     def start
       loop do
-        m = @channel.receive
-        @state = do_message(m).not_nil!
+        message = @channel.receive
+        @state = do_cast(message).not_nil!
       end
     end
   end

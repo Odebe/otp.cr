@@ -4,11 +4,13 @@ module OTP
       macro included
         init_handlers!
 
-        @channel = Channel(Union(*T)).new  
+        alias HandlersTypes = Union(*T) 
+
+        @channel = Channel(HandlersTypes).new
       end
 
       macro init_handlers!
-        def do_message(m)
+        def do_cast(m)
           {% for type in T.resolve %}
             if m.is_a? {{ type }}
               return handle(@state, m)
