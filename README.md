@@ -24,36 +24,43 @@ class MyServer
   include OTP::GenServer::State(Int32)
   include OTP::GenServer::Handlers(Int32, Symbol, Bool)
 
-  def handle(state, m : Int32)
+  def init(params)
+    params
+  end
+
+  def foo(m : Symbol, actor : OTP::Actor)
+    actor.cast(self, m)
+  end
+
+  def handle_cast(state, m : Int32)
     puts "It's #{typeof(m)}, and equal #{m}"
 
-    m + 123 # new state
+    {:noreply, state + 1, nil, nil}
   end
 
-  def handle(state, m : Symbol)
+  def handle_cast(state, m : Symbol)
     puts "It's #{typeof(m)}, and equal #{m.inspect}"
 
-    1 # new state
+    {:reply, state, self, 1}
   end
 
-  def handle(state, m : Bool)
+  def handle_cast(state, m : Bool)
     puts "It's #{typeof(m)}, and equal #{m.inspect}"
 
-    0 # new state
+    {:noreply, state, nil, nil}
   end
 end
 
-s = MyServer.init(123)
+s = MyServer.new(123)
 s.spawn
 
-s.cast(1)
-sleep 2
+ss = MyServer.new(1)
+ss.spawn
 
-s.cast(:a)
-sleep 2
+# s.add_link(ss)
+s.foo(:lololol, ss)
 
-s.cast(true)
-sleep 2
+Fiber.yield
 ```
 
 TODO: Write usage instructions here

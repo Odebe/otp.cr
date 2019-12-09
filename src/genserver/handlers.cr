@@ -5,22 +5,23 @@ module OTP
         init_handlers!
 
         alias HandlersTypes = Union(*T) 
+        alias ChannelType = Tuple(Symbol, OTP::Actor, HandlersTypes)
 
-        @channel = Channel(HandlersTypes).new
+        @channel = Channel(ChannelType).new
       end
 
       macro init_handlers!
         def do_cast(m)
           {% for type in T.resolve %}
             if m.is_a? {{ type }}
-              return handle(@state, m)
+              return handle_cast(@state, m)
             end
           {% end %}
         end
     
         {% for type in T.resolve %}
-          def cast(m : {{ type }})
-            @channel.send(m)
+          def cast(actor : OTP::Actor, m : {{ type }})
+            @channel.send({:cast, actor, m})
           end
         {% end %}
       end
